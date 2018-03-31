@@ -22,4 +22,4 @@ $arr = array(
     "token" => $_POST['token'],
 );
 
-echo "<pre>".json_encode($arr)."</pre>";
+echo "<pre>" . json_encode($arr) . "</pre>";
