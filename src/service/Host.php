@@ -10,11 +10,12 @@ require("../util/Tool.php");
 class Host
 {
 
-    public $sqlData = Array(
-        "serverName" => "localhost",
-        "username" => "root",
-        "password" => "159357"
-    );
+    public $sqlData = null;
+
+    public function __construct()
+    {
+        $this->sqlData = Tool::getSqlInfo();
+    }
 
     function get()
     {
@@ -71,7 +72,7 @@ class Host
             $pdo = new PDO("mysql:host=" . $sqlInfo["serverName"] . ";dbname=beeeyehced", $sqlInfo["username"], $sqlInfo["password"]);
             $sql = "INSERT INTO beeeye_host (host_ids, name, ip, port, os_type, os_version, os_arch, login_name, login_pwd, status) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $pdo->prepare($sql);
-            $hostIds = getRandomString();
+            $hostIds = Tool::getRandomString();
             $stmt->bindValue(1, $hostIds);
             $stmt->bindValue(2, $data["name"]);
             $stmt->bindValue(3, $data["ip"]);

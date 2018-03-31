@@ -8,6 +8,15 @@
 
 class Tool
 {
+    public static function getSqlInfo(){
+        return $sqlData = Array(
+            "serverName" => "localhost",
+            "username" => "root",
+            "password" => "159357"
+        );
+    }
+
+
     public static function getRequestData(){
         $final = file_get_contents('php://input');
         $data = json_decode($final, true);

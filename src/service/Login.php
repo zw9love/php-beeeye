@@ -8,15 +8,23 @@
 require("../util/Tool.php");
 class Login
 {
+    public $sqlData = null;
+
+    public function __construct()
+    {
+        $this->sqlData = Tool::getSqlInfo();
+    }
+
+//    public $sqlData = Tool::getSqlInfo();
+
     function dologin()
     {
+        $sqlInfo = $this->sqlData;
         $data = Tool::getRequestData();
         try {
 //        echo md5($data["login_pwd"]);
-            $servername = "localhost";
-            $username = "root";
-            $password = "159357";
-            $pdo = new PDO("mysql:host=$servername;dbname=beeeyehced", $username, $password);
+            $pdo = new PDO("mysql:host=" . $sqlInfo["serverName"] . ";dbname=beeeyehced", $sqlInfo["username"], $sqlInfo["password"]);
+
             //查询
             $sql = "select * from common_user where login_name = ? and login_pwd = ? ";
             $stmt = $pdo->prepare($sql);
@@ -50,7 +58,6 @@ class Login
     function loged()
     {
         $data = Tool::getRequestData();
-//    echo $data["token"];
         $login_name = $_SESSION[$data["token"]];
         $postData = array(
             "role_name" => $login_name,
