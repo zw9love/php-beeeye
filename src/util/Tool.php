@@ -8,7 +8,8 @@
 
 class Tool
 {
-    public static function getSqlInfo(){
+    public static function getSqlInfo()
+    {
         return $sqlData = Array(
             "serverName" => "localhost",
             "username" => "root",
@@ -17,7 +18,8 @@ class Tool
     }
 
 
-    public static function getRequestData(){
+    public static function getRequestData()
+    {
         $final = file_get_contents('php://input');
         $data = json_decode($final, true);
         return $data;
