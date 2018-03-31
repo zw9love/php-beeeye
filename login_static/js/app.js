@@ -188,7 +188,7 @@ var vm = new Vue({
 
         login: function () {
             // var URL = "/login/dologin"
-            var URL = "src/Login.php?dologin"
+            var URL = "src/LoginController.php?dologin"
             // var URL = "http://192.168.0.115:9989/data.php?login_name=lee&login_pwd=123456"
             // var URL = "http://192.168.0.115:9989/data.php"
             //JSON.stringify（）
@@ -212,7 +212,7 @@ var vm = new Vue({
                             let postData = JSON.stringify({
                                 'token': request.getResponseHeader("token"),
                             })
-                            this.getData('src/Login.php?loged', postData, res => {
+                            this.getData('src/LoginController.php?loged', postData, res => {
                                 this.role = 100
                                 this.token = request.getResponseHeader("token")
                                 let loged = this.$refs.loged
