@@ -5,7 +5,8 @@
  * Date: 2018/3/31
  * Time: 21:53
  */
-require(__DIR__."/../util/Tool.php");
+require(__DIR__ . "/../util/Tool.php");
+
 class LoginController
 {
     public $sqlData = null;

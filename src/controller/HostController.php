@@ -66,9 +66,9 @@ class HostController
                 $stmt->execute();
                 $res = $stmt->fetch(PDO::FETCH_ASSOC);
                 $row_count = $stmt->rowCount();
-                if($row_count > 0){
+                if ($row_count > 0) {
                     echo Tool::getJsonData(200, "成功", $res);
-                }else{
+                } else {
                     echo Tool::getJsonData(606, "失败，没有该条记录", null);
                 }
             }

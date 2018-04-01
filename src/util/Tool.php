@@ -17,7 +17,6 @@ class Tool
         );
     }
 
-
     public static function getRequestData()
     {
         $final = file_get_contents('php://input');
