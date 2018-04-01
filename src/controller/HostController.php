@@ -5,7 +5,8 @@
  * Date: 2018/3/31
  * Time: 20:52
  */
-require(__DIR__."/../util/Tool.php");
+require(__DIR__ . "/../util/Tool.php");
+
 class HostController
 {
 
@@ -16,48 +17,63 @@ class HostController
         $this->sqlData = Tool::getSqlInfo();
     }
 
-    function get()
+    function get($ids)
     {
         $sqlInfo = $this->sqlData;
         $data = Tool::getRequestData();
         try {
 //        echo md5($data["login_pwd"]);
             $pdo = new PDO("mysql:host=" . $sqlInfo["serverName"] . ";dbname=beeeyehced", $sqlInfo["username"], $sqlInfo["password"]);
-            //查询
-            $pageNumber = 0;
-            $pageSize = 30;
-            //  && count($page) > 0
-            if (!is_null($data["page"])) {
-                $page = $data["page"];
-                $pageNumber = $page['pageNumber'] - 1;
-                $pageSize = $page["pageSize"];
-            }
-            $sql = "select * from beeeye_host limit $pageNumber, $pageSize";
-            $countSql = "select count(*) as total from beeeye_host";
-            $stmt = $pdo->prepare($sql);
-            $stmtCount = $pdo->prepare($countSql);
+            //ids不存在查询
+            if (is_null($ids)) {
+                $pageNumber = 0;
+                $pageSize = 30;
+                //  && count($page) > 0
+                if (!is_null($data["page"])) {
+                    $page = $data["page"];
+                    $pageNumber = $page['pageNumber'] - 1;
+                    $pageSize = $page["pageSize"];
+                }
+                $sql = "select * from beeeye_host limit $pageNumber, $pageSize";
+                $countSql = "select count(*) as total from beeeye_host";
+                $stmt = $pdo->prepare($sql);
+                $stmtCount = $pdo->prepare($countSql);
 //        $stmt->bindValue(1, $page["pageNumber"] - 1);
 //        $stmt->bindValue(2, $page["pageSize"]);
-            $stmt->execute();
-            $stmtCount->execute();
+                $stmt->execute();
+                $stmtCount->execute();
 //        $res = $stmt->fetch();
-            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $list = array();
-            $total = (int)($stmtCount->fetch(PDO::FETCH_ASSOC)["total"]);
-            $i = 0;
-            foreach ($res as $row) {
-                $i++;
-                array_push($list, $row);
+                $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $list = array();
+                $total = (int)($stmtCount->fetch(PDO::FETCH_ASSOC)["total"]);
+                $i = 0;
+                foreach ($res as $row) {
+                    $i++;
+                    array_push($list, $row);
 //            echo $row['username'] . '<br/>';
+                }
+                $postData = array(
+                    "pageNumber" => $pageNumber,
+                    "pageSize" => $pageSize,
+                    "list" => $list,
+                    "totalRow" => $total
+                );
+                echo Tool::getJsonData(200, "成功", $postData);
+            } else {
+                $sql = "select * from beeeye_host where host_ids = ? ";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(1, $ids);
+                $stmt->execute();
+                $res = $stmt->fetch(PDO::FETCH_ASSOC);
+                $row_count = $stmt->rowCount();
+                if($row_count > 0){
+                    echo Tool::getJsonData(200, "成功", $res);
+                }else{
+                    echo Tool::getJsonData(606, "失败，没有该条记录", null);
+                }
             }
-            $postData = array(
-                "pageNumber" => $pageNumber,
-                "pageSize" => $pageSize,
-                "list" => $list,
-                "totalRow" => $total
-            );
+            // 关闭连接
             $pdo = null;
-            echo Tool::getJsonData(200, "成功", $postData);
         } catch (PDOException $e) {
             echo $e->getMessage();
         }

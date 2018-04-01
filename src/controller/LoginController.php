@@ -43,7 +43,7 @@ class LoginController
                 header("token:" . $token);
                 echo Tool::getJsonData(200, "成功", null);
             } else {
-                echo Tool::getJsonData(606, "失败", null);
+                echo Tool::getJsonData(606, "用户名或密码错误", null);
             }
 //        foreach ($res as $row) {
 //            echo $row['username'] . '<br/>';
