@@ -7,7 +7,6 @@ var vm = new Vue({
     data: {
         loginname: "",
         passwd: "",
-        token: '',
         progressStatus: '',
         step: 0,
         progress_value: 0,
@@ -22,7 +21,7 @@ var vm = new Vue({
         num: 5,
         hostListActive: false,
         role: '',
-        // token: ''
+        token: ''
     },
     created: function () {
 
@@ -213,10 +212,13 @@ var vm = new Vue({
                                 'token': request.getResponseHeader("token"),
                             })
                             this.getData('index.php/login/loged', postData, res => {
-                                this.role = 100
-                                this.token = request.getResponseHeader("token")
+                                this.role = res.data.role
+                                // this.token = request.getResponseHeader("token")
+                                this.token = res.data.token
                                 let loged = this.$refs.loged
-                                loged.submit()
+                                setTimeout(o => {
+                                    loged.submit()
+                                }, 0)
                             })
                             // window.location = '/login/loged?token=' + request.getResponseHeader("token");
                             break;

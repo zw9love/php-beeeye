@@ -12,9 +12,26 @@
 header('Access-Control-Allow-Origin: http://localhost:9090');
 session_start();
 define('APPPATH', trim(__DIR__ . '/'));
-if ($_SERVER["REQUEST_URI"] == $_SERVER["SCRIPT_NAME"]) {
+if($_SERVER["REQUEST_URI"] == "/"){
+    $url = "/login.html";
+    header("Location: $url");
+//    echo "<script language='javascript' type='text/javascript'>";
+//    echo "location.href='$url'";
+//    echo "</script>";
+}
+else if ($_SERVER["REQUEST_URI"] == $_SERVER["SCRIPT_NAME"]) {
     header('Content-Type:text/html;Charset=utf-8');
-    require("index.html");
+    if(count($_POST) == 0){
+        return require("error.html");
+    }
+    $data = $_POST;
+    $postToken = $data["token"];
+    $postRoleName = $data["role"];
+    if(($_SESSION[$postToken] == $postRoleName) && ($_SESSION[$postRoleName] == $postToken)){
+        require("index.html");
+    }else{
+        require("error.html");
+    }
 } else {
     header('Content-Type:application/json;Charset=utf-8');
     $path = explode("/", $_SERVER['PATH_INFO']);

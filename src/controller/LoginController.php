@@ -61,7 +61,7 @@ class LoginController
         $data = Tool::getRequestData();
         $login_name = $_SESSION[$data["token"]];
         $postData = array(
-            "role_name" => $login_name,
+            "role" => $login_name,
             "token" => $data["token"]
         );
         echo Tool::getJsonData(200, "成功", $postData);
